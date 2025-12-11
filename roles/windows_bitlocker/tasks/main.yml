@@ -1,0 +1,25 @@
+---
+- name: Enable BitLocker Encryption using PowerShell
+  ansible.windows.win_shell: |
+    $passwd = (Enable-BitLocker -MountPoint "{{ drive_letter }}" -EncryptionMethod XtsAes128 -RecoveryPasswordProtector -UsedSpaceOnly).KeyProtector
+    (Get-BitLockerVolume -MountPoint "{{ drive_letter }}").KeyProtector | Where-Object { $_.KeyProtectorType -eq 'RecoveryPassword' } | Select-Object -ExpandProperty RecoveryPassword
+  register: bitlocker_output
+
+- name: Show Recovery Key in terminal
+  debug:
+    msg: "BitLocker Recovery Key: {{ bitlocker_output.stdout }}"
+
+- name: Create local folder for recovery key
+  delegate_to: localhost
+  ansible.builtin.file:
+    path: "./recovery_keys"
+    state: directory
+    mode: '0755'
+
+- name: Save Recovery Key to file
+  delegate_to: localhost
+  ansible.builtin.copy:
+    content: |
+      BitLocker Recovery Key for {{ inventory_hostname }}:
+      {{ bitlocker_output.stdout }}
+    dest: "./recovery_keys/{{ inventory_hostname }}.txt"

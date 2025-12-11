@@ -1,0 +1,24 @@
+---
+- name: Install NGINX
+  ansible.builtin.package:
+    name: nginx
+    state: present
+  notify: restart nginx
+
+- name: Start and enable NGINX service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Allow HTTP and HTTPS through firewalld
+  ansible.builtin.firewalld:
+    service: "{{ item }}"
+    zone: public
+    permanent: yes
+    state: enabled
+  loop:
+    - http
+    - https
+  notify: reload firewall
+

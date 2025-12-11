@@ -1,0 +1,26 @@
+---
+- name: Scan for available updates
+  ansible.windows.win_updates:
+    state: searched
+  register: update_search
+
+- name: Show available updates
+  debug:
+    msg: "Updates found: {{ update_search.updates | default('No update data returned') }}"
+
+- name: Install all available updates
+  ansible.windows.win_updates:
+    category_names:
+      - CriticalUpdates
+      - SecurityUpdates
+      - UpdateRollups
+    reboot: yes
+  register: update_install
+
+- name: Reboot if required after updates
+  ansible.windows.win_reboot:
+  when: update_install.reboot_required | default(false)
+
+- name: Confirm update status
+  debug:
+    msg: "Updates installed successfully. Reboot required: {{ update_install.reboot_required | default('Unknown') }}"

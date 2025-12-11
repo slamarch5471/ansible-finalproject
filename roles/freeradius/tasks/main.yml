@@ -1,0 +1,46 @@
+---
+- name: Install FreeRADIUS and utilities
+  ansible.builtin.dnf:
+    name:
+      - freeradius
+      - freeradius-utils
+    state: present
+  notify: restart freeradius
+
+- name: Ensure FreeRADIUS service is enabled and running
+  ansible.builtin.service:
+    name: radiusd
+    state: started
+    enabled: yes
+  ignore_errors: yes
+
+- name: Add RADIUS test user
+  ansible.builtin.lineinfile:
+    path: /etc/raddb/users
+    regexp: '^user1'
+    line: 'user1 Cleartext-Password := "password123"'
+    state: present
+  notify: restart freeradius
+
+- name: Configure RADIUS client
+  ansible.builtin.blockinfile:
+    path: /etc/raddb/clients.conf
+    marker: "# {mark} ANSIBLE-RADIUS-CONFIG"
+    block: |
+      client testclient {
+        ipaddr = 10.2.37.233
+        secret = testing123
+        require_message_authenticator = no
+        nas_type = other
+      }
+  notify: restart freeradius
+
+- name: Restart FreeRADIUS to apply config
+  ansible.builtin.service:
+    name: radiusd
+    state: restarted
+  ignore_errors: yes
+
+- name: Output confirmation
+  ansible.builtin.debug:
+    msg: "FreeRADIUS installed and configured with client and test user"
