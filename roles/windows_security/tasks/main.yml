@@ -1,0 +1,19 @@
+---
+- name: Allow RDP through Windows Firewall
+  community.windows.win_firewall_rule:
+    name: Allow RDP
+    localport: 3389
+    protocol: TCP
+    action: allow
+    direction: in
+    state: present
+    enabled: yes
+
+- name: Enable Real-Time Protection in Windows Defender
+  ansible.windows.win_powershell:
+    script: |
+      Set-MpPreference -DisableRealtimeMonitoring $false
+
+- name: Run a Quick Defender Scan
+  ansible.windows.win_shell: |
+    powershell.exe Start-MpScan -ScanType QuickScan

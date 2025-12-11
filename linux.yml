@@ -1,0 +1,11 @@
+---
+- name: Linux Automation Bundle
+  hosts: linux
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - nginx_webserver
+    - linux_firewall
+    - linux_email
+    - freeradius

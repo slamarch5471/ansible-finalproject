@@ -1,0 +1,5 @@
+---
+mail_domain: "SawLaM-AlmaLinux"
+mail_users:
+  - user1
+  - user2

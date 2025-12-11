@@ -1,0 +1,11 @@
+---
+- name: Windows Automation Bundle
+  hosts: windows
+  gather_facts: yes
+
+  roles:
+    - windows_software_install
+    - windows_security
+    - windows_bitlocker
+    - windows_monitoring
+    - windows_updates

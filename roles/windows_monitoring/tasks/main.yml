@@ -1,0 +1,12 @@
+---
+- name: Display CPU usage
+  debug:
+    msg: "CPU Cores: {{ ansible_processor_cores }} | CPU Count: {{ ansible_processor_count }}"
+
+- name: Display Total and Free RAM
+  debug:
+    msg: "Total RAM: {{ ansible_memtotal_mb }} MB | Free RAM: {{ ansible_memfree_mb }} MB"
+
+- name: Show Disk Sizes and Usage
+  debug:
+    var: ansible_mounts

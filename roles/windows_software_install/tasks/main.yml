@@ -1,0 +1,38 @@
+---
+- name: Install Google Chrome
+  ansible.windows.win_package:
+    path: https://dl.google.com/dl/chrome/install/375.126/chrome_installer.exe
+    arguments: '/silent /install'
+    state: present
+
+- name: Install Mozilla Firefox
+  win_package:
+    path: https://ftp.mozilla.org/pub/firefox/releases/128.0.2/win64/en-US/Firefox%20Setup%20128.0.2.exe
+    state: present
+    arguments: -ms
+
+- name: Install VLC Media Player
+  ansible.windows.win_package:
+    path: https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe
+    arguments: /S
+    state: present
+
+- name: Ensure C:\Temp directory exists
+  ansible.windows.win_file:
+    path: C:\Temp
+    state: directory
+
+- name: Download Office 365 Click-to-Run installer
+  ansible.windows.win_get_url:
+    url: https://officecdn.microsoft.com/pr/wsus/setup.exe
+    dest: C:\Temp\OfficeSetup.exe
+
+- name: Install Office 365 silently
+  ansible.windows.win_shell: |
+    "C:\Temp\OfficeSetup.exe /configure C:\Temp\config.xml" 
+  args:
+    chdir: C:\Temp
+
+- name: Reboot if needed
+  ansible.windows.win_reboot:
+  when: ansible_reboot_pending is defined and ansible_reboot_pending

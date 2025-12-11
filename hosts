@@ -1,0 +1,16 @@
+[windows]
+mylovelywindows ansible_host=10.2.37.233
+
+[windows:vars]
+ansible_user="Sawyer LaMarch"
+ansible_password=bmccrocks
+ansible_connection=winrm
+ansible_winrm_transport=ntlm
+ansible_winrm_scheme=http
+ansible_winrm_port=5985
+ansible_winrm_server_cert_validation=ignore
+
+
+
+[linux]
+mylinux ansible_host=10.2.37.238 ansible_user=slamarch ansible_password=bmccrocks ansible_become_pass=bmccrocks ansible_connection=ssh

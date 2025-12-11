@@ -1,0 +1,28 @@
+---
+- name: Install Postfix
+  ansible.builtin.yum:
+    name: postfix
+    state: present
+  notify: restart postfix
+
+- name: Set system mail domain
+  ansible.builtin.copy:
+    dest: /etc/mailname
+    content: "{{ mail_domain }}\n"
+
+- name: Enable and Start Postfix service
+  ansible.builtin.service:
+    name: postfix
+    state: started
+    enabled: yes
+
+- name: Create mail users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: present
+    createhome: yes
+  loop: "{{ mail_users }}"
+
+- name: Display created mail users
+  ansible.builtin.debug:
+    msg: "Email accounts created: {{ mail_users }}"
