@@ -1,0 +1,9 @@
+# Local Ansible inventory and secrets
+hosts
+hosts.*
+!hosts.example
+
+# Generated BitLocker recovery keys
+recovery_keys/
+*.vault
+.vault_pass
