@@ -1,0 +1,16 @@
+# Example inventory only. Replace these values in your local copy.
+# Do not commit real hostnames, IP addresses, usernames, or passwords.
+
+[windows]
+windows_lab ansible_host=192.0.2.10
+
+[windows:vars]
+ansible_user=YOUR_WINDOWS_USER
+ansible_connection=winrm
+ansible_winrm_transport=ntlm
+ansible_winrm_scheme=http
+ansible_winrm_port=5985
+ansible_winrm_server_cert_validation=ignore
+
+[linux]
+linux_lab ansible_host=192.0.2.20 ansible_user=YOUR_LINUX_USER ansible_connection=ssh
