@@ -1,38 +1,63 @@
 # Ansible Final Project – Automation Roles
 
-This repository contains a collection of Ansible roles and playbooks designed to automate the deployment and configuration of Windows and Linux machines.  
-This project was built for the BMCC CS-320 Final Project.
+An academic automation project built for the BMCC CS-320 final project. It uses Ansible playbooks and roles to practice configuring Windows and Linux systems.
 
----
+## What the project covers
 
-## 📌 Project Contents
+### Linux automation
+- **firewall_linux** – configures firewalld and manages web-service ports
+- **nginx** – installs and configures an NGINX web server
+- **freeradius** – sets up FreeRADIUS authentication
+- **email_server** – explores Postfix/Dovecot mail-server configuration
 
-### 🖥️ Linux Automation
-- **firewall_linux**: Configures firewalld and opens ports (80, 443)
-- **nginx**: Installs and configures an NGINX web server
-- **freeradius**: Installs, configures, and sets up FreeRADIUS authentication
-- **email_server**: Installs and configures Postfix/Dovecot (if used)
+### Windows automation
+- **windows_security** – configures Windows Firewall and Windows Defender
+- **bitlocker** – demonstrates BitLocker configuration
+- **system_monitoring** – gathers CPU, memory, and disk information
+- **windows_updates** – manages Windows updates and reboot handling
+- **windows_software** – automates installation of selected applications
 
-### 🪟 Windows Automation
-- **windows_security**: Configures Windows Firewall and Windows Defender
-- **bitlocker**: Enables BitLocker disk encryption and generates recovery keys
-- **system_monitoring**: Gathers CPU, RAM, and disk usage
-- **windows_updates**: Installs Windows Updates and reboots if necessary
-- **windows_software**: Installs Chrome, Firefox, VLC, and Office
+## Requirements
 
----
+- Ansible installed on the control machine
+- Reachable Linux and/or Windows test machines
+- Appropriate SSH access for Linux hosts
+- WinRM configured for Windows hosts
+- A valid inventory file for your lab environment
 
-## 🚀 How to Run the Project
+## Configure the inventory
 
-### 1. Update the inventory (hosts) file
+Create or edit the `hosts` inventory file with your own lab machine details. Example placeholders:
 
-[linux]IP ADDRESS ansible_user=USERNAME ansible_password=YOURPASS ansible_become_password=YOURPASS
+```ini
+[linux]
+192.0.2.10 ansible_user=YOUR_USER
 
 [windows]
-IP ADDRESS ansible_user=Administrator ansible_password=YOURPASS ansible_connection=winrm
+192.0.2.20 ansible_user=Administrator ansible_connection=winrm
+```
 
-### 2. Run ALL roles using the master playbook:
+Use your own secure authentication method and connection settings. Do not put real passwords, private keys, BitLocker recovery keys, tokens, or other secrets in this repository. Keep sensitive values outside version control (for example, with Ansible Vault or environment-specific secret management).
 
+## Run the playbooks
+
+Run the Linux and Windows playbooks separately:
+
+```bash
 ansible-playbook -i hosts linux.yml
 ansible-playbook -i hosts windows.yml
+```
 
+Review each playbook and role before running it, and test in an isolated lab environment first.
+
+## Learning goals
+
+This project provided practice with:
+- Ansible inventories, playbooks, and roles
+- Linux service and firewall configuration
+- Windows security and system administration tasks
+- Repeatable automation and troubleshooting
+
+## Project context
+
+Academic lab project. The playbooks are intended for learning and testing, not as a production-ready deployment.
